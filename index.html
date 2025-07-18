@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Smart Agriculture Monitoring System for optimizing crop growth">
+  <title>Smart Agriculture Monitoring System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script defer src="script.js"></script>
+</head>
+<body class="font-poppins">
+  <!-- ARIA Live Region for Accessibility -->
+  <div id="live-region" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+  
+  <!-- Navigation -->
+  <nav class="bg-white shadow-lg sticky top-0 z-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <div class="flex items-center">
+          <span class="text-2xl font-bold text-green-800" aria-label="SmartAgri">
+            <span aria-hidden="true">🌾</span> SmartAgri
+          </span>
+        </div>
+        <div class="hidden md:flex space-x-6">
+          <a href="#home" class="nav-link text-gray-700 hover:text-green-700 font-medium transition-colors">Home</a>
+          <a href="#monitor" class="nav-link text-gray-700 hover:text-green-700 font-medium transition-colors">Monitor</a>
+          <a href="#crop-suitability" class="nav-link text-gray-700 hover:text-green-700 font-medium transition-colors">Crop Suitability</a>
+          <a href="#suggestions" class="nav-link text-gray-700 hover:text-green-700 font-medium transition-colors">Suggestions</a>
+          
+          <a href="#about" class="nav-link text-gray-700 hover:text-green-700 font-medium transition-colors">About</a>
+          <a href="login.html" class="nav-link text-gray-700 hover:text-green-700 font-medium transition-colors">Login</a>
+          <button id="night-mode-toggle" class="text-gray-700 hover:text-green-700 font-medium transition-colors" aria-pressed="false">
+            <span class="sr-only">Toggle</span>
+            <i class="fas fa-moon" aria-hidden="true"></i>
+          </button>
+        </div>
+        <button id="mobile-menu-button" class="md:hidden text-gray-700 hover:text-green-700">
+          <span class="sr-only">Open menu</span>
+          <i class="fas fa-bars text-xl"></i>
+        </button>
+      </div>
+    </div>
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white shadow-lg">
+      <div class="px-2 pt-2 pb-3 space-y-1">
+        <a href="#home" class="block px-3 py-2 text-gray-700 hover:text-green-700">Home</a>
+        <a href="#monitor" class="block px-3 py-2 text-gray-700 hover:text-green-700">Monitor</a>
+        <a href="#crop-suitability" class="block px-3 py-2 text-gray-700 hover:text-green-700">Crop Suitability</a>
+        <a href="#suggestions" class="block px-3 py-2 text-gray-700 hover:text-green-700">Suggestions</a>
+       
+        <a href="#about" class="block px-3 py-2 text-gray-700 hover:text-green-700">About</a>
+        <a href="login.html" class="block px-3 py-2 text-gray-700 hover:text-green-700">Login</a>
+        <button id="mobile-night-mode" class="w-full text-left px-3 py-2 text-gray-700 hover:text-green-700">
+          Night Mode
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header id="home" class="hero gradient-bg text-center py-20 px-4">
+    <div class="max-w-4xl mx-auto">
+      <h1 class="text-4xl md:text-5xl font-bold text-green-800 mb-4">
+        <span aria-hidden="true">🌿</span> 
+        <span>Smart Agriculture Monitoring</span>
+      </h1>
+      <p class="text-lg md:text-xl text-gray-700 mb-8">Know your crop better, grow smarter! <span aria-hidden="true">🚜</span></p>
+      <a href="#crop-suitability" class="inline-block bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors">
+        Check Crop Suitability
+      </a>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Crop Suitability Section -->
+    <section id="crop-suitability" class="py-16 bg-green-50">
+      <div class="max-w-2xl mx-auto px-4">
+        <h2 class="text-3xl font-bold text-gray-800 text-center mb-8">
+          <span aria-hidden="true">🌱</span> Crop Suitability Check
+        </h2>
+        <form id="cropForm" class="space-y-6 bg-white p-6 rounded-lg shadow-md">
+          <div class="flex flex-col sm:flex-row gap-4"> <!-- Added flex container -->
+            <div class="flex-1">
+              <label for="crop" class="block text-sm font-medium text-gray-700 mb-1">Crop</label>
+              <select id="crop" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition" aria-describedby="crop-error" required>
+                <option value="" disabled selected>Select crop</option>
+                <!-- Options populated dynamically by JavaScript -->
+              </select>
+              <span id="crop-error" class="error text-red-500 text-sm hidden mt-1" data-original-text="Please select a crop."></span>
+            </div>
+            
+            <div class="flex-1">
+              <label for="soilType" class="block text-sm font-medium text-gray-700 mb-1">Soil Type</label>
+              <select id="soilType" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition" aria-describedby="soilType-error" required>
+                <option value="" disabled selected>Select soil type</option>
+                <option value="Loamy">Loamy</option>
+                <option value="Sandy">Sandy</option>
+                <option value="Clay">Clay</option>
+                <option value="Silt">Silt</option>
+              </select>
+              <span id="soilType-error" class="error text-red-500 text-sm hidden mt-1" data-original-text="Please select a soil type."></span>
+            </div>
+            
+            <div class="flex-1">
+              <label for="area" class="block text-sm font-medium text-gray-700 mb-1">Area</label>
+              <select id="area" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition" aria-describedby="area-error" required>
+                <option value="" disabled selected>Select area</option>
+                <option value="North Field">North Field</option>
+                <option value="South Field">South Field</option>
+                <option value="Coastal Region">Coastal Region</option>
+              </select>
+              <span id="area-error" class="error text-red-500 text-sm hidden mt-1" data-original-text="Please select an area."></span>
+            </div>
+          </div>
+          
+          <div class="flex flex-col sm:flex-row gap-4">
+            <button type="submit" class="flex-1 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors flex items-center justify-center">
+              <span aria-hidden="true">🌾</span>
+              <span class="ml-2">Check Suitability</span>
+            </button>
+            <button type="button" class="flex-1 py-3 bg-gray-500 hover:bg-gray-600 text-white font-semibold rounded-lg transition-colors flex items-center justify-center" id="resetForm">
+              <span aria-hidden="true">🔄</span>
+              <span class="ml-2">Reset</span>
+            </button>
+          </div>
+      </form>
+        
+        <div id="output" class="mt-6"></div>
+        
+        <div id="progress" class="hidden mt-6">
+          <div class="relative pt-1">
+            <div class="flex items-center justify-between">
+              <div>
+                <span class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-green-600 bg-green-200">
+                  Analyzing
+                </span>
+              </div>
+              <div class="text-right">
+                <span class="text-xs font-semibold inline-block text-green-600" id="progress-percentage">0%</span>
+              </div>
+            </div>
+            <div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-green-200">
+              <div id="progress-bar" class="progress-bar shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-green-500 transition-all duration-300" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sensor Monitor Section -->
+    <section id="monitor" class="py-16 bg-white">
+      <div class="max-w-4xl mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">
+          <span aria-hidden="true">📡</span> Sensor Monitor
+        </h2>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="bg-green-50 p-6 rounded-lg shadow hover:shadow-md transition-shadow">
+            <div class="flex items-center mb-2">
+              <span class="text-2xl mr-3" aria-hidden="true">💧</span>
+              <h3 class="text-lg font-semibold">Soil Moisture</h3>
+            </div>
+            <p id="soilMoisture" class="text-3xl font-bold text-green-700">--%</p>
+            <p class="text-sm text-gray-500 mt-1">Optimal: 60-80%</p>
+          </div>
+          
+          <div class="bg-yellow-50 p-6 rounded-lg shadow hover:shadow-md transition-shadow">
+            <div class="flex items-center mb-2">
+              <span class="text-2xl mr-3" aria-hidden="true">🌡</span>
+              <h3 class="text-lg font-semibold">Temperature</h3>
+            </div>
+            <p id="temperature" class="text-3xl font-bold text-yellow-700">--°C</p>
+            <p class="text-sm text-gray-500 mt-1">Optimal: 20-30°C</p>
+          </div>
+          
+          <div class="bg-blue-50 p-6 rounded-lg shadow hover:shadow-md transition-shadow">
+            <div class="flex items-center mb-2">
+              <span class="text-2xl mr-3" aria-hidden="true">💦</span>
+              <h3 class="text-lg font-semibold">Humidity</h3>
+            </div>
+            <p id="humidity" class="text-3xl font-bold text-blue-700">--%</p>
+            <p class="text-sm text-gray-500 mt-1">Optimal: 60-80%</p>
+          </div>
+          
+          <div class="bg-gray-50 p-6 rounded-lg shadow hover:shadow-md transition-shadow">
+            <div class="flex items-center mb-2">
+              <span class="text-2xl mr-3" aria-hidden="true">🌧</span>
+              <h3 class="text-lg font-semibold">Rainfall</h3>
+            </div>
+            <p id="rainfall" class="text-3xl font-bold text-gray-700">--mm</p>
+            <p class="text-sm text-gray-500 mt-1">Last 24 hours</p>
+          </div>
+        </div>
+        
+        <div class="mt-8 text-center">
+          <button id="refresh-sensors" class="py-3 px-6 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors inline-flex items-center">
+            <span aria-hidden="true">🔄</span>
+            <span class="ml-2">Refresh Sensors</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Data Visualizations -->
+    <section id="visualizations" class="py-16 bg-green-50">
+      <div class="max-w-7xl mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">
+          <span aria-hidden="true">📊</span> Visual Insights
+        </h2>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div class="bg-white p-4 rounded-lg shadow">
+            <h3 class="text-lg font-semibold mb-4 text-center">Crop Conditions Radar</h3>
+            <canvas id="radarChart" class="w-full h-64" aria-label="Radar chart showing crop conditions"></canvas>
+          </div>
+          
+          <div class="bg-white p-4 rounded-lg shadow">
+            <h3 class="text-lg font-semibold mb-4 text-center">Sensor Readings</h3>
+            <canvas id="barChart" class="w-full h-64" aria-label="Bar chart showing sensor readings"></canvas>
+          </div>
+          
+          <div class="bg-white p-4 rounded-lg shadow">
+            <h3 class="text-lg font-semibold mb-4 text-center">Crop Suitability</h3>
+            <canvas id="doughnutChart" class="w-full h-64" aria-label="Doughnut chart showing crop suitability"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Farmer's Suggestions -->
+    <section id="suggestions" class="py-16 bg-lime-50">
+      <div class="max-w-3xl mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center text-emerald-800 mb-6">
+          <span aria-hidden="true">🧑‍🌾</span> Farmer's Suggestions
+        </h2>
+        <p class="text-center text-gray-600 mb-8">Personalized recommendations based on live sensor data and optimal crop ranges</p>
+        
+        <div id="suggestion-card" class="bg-white p-6 rounded-lg shadow-lg relative overflow-hidden">
+          <div id="suggestion-content" class="text-gray-800 space-y-4">
+            <div class="text-center py-8">
+              <i class="fas fa-seedling text-4xl text-green-500 mb-4" aria-hidden="true"></i>
+              <p class="text-lg">Select a crop and area to get personalized farming suggestions</p>
+            </div>
+          </div>
+          <span class="absolute top-0 right-0 bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
+            Smart Tips
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-16 bg-white">
+      <div class="max-w-4xl mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">About SmartAgri</h2>
+        
+        <div class="grid md:grid-cols-2 gap-8">
+          <div class="bg-green-50 p-6 rounded-lg shadow">
+            <h3 class="text-xl font-semibold mb-4 text-green-800">
+              <span aria-hidden="true">🌾</span> Our Mission
+            </h3>
+            <p class="text-gray-700">
+              SmartAgri empowers farmers with real-time data to optimize crop growth and sustainability. 
+              We combine agricultural expertise with cutting-edge technology to help you make informed 
+              decisions for better yields.
+            </p>
+          </div>
+          
+          <div class="bg-green-50 p-6 rounded-lg shadow">
+            <h3 class="text-xl font-semibold mb-4 text-green-800">
+              <span aria-hidden="true">📱</span> How It Works
+            </h3>
+            <ol class="list-decimal list-inside text-gray-700 space-y-2">
+              <li>Select your crop and location</li>
+              <li>Get real-time sensor data</li>
+              <li>Receive personalized recommendations</li>
+              <li>Optimize your farming practices</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-green-900 text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div class="md:col-span-2">
+        <h3 class="text-2xl font-bold mb-4 flex items-center">
+          <span aria-hidden="true">🌿</span>
+          <span class="ml-2">SmartAgri</span>
+        </h3>
+        <p class="text-white-200 mb-4">
+          Empowering sustainable farming with cutting-edge technology and data-driven insights.
+        </p>
+        <div class="flex space-x-4">
+          <a href="#" class="text-white-200 hover:text-white transition-colors" aria-label="Facebook">
+            <i class="fab fa-facebook-f"></i>
+          </a>
+          <a href="#" class="text-white-200 hover:text-white transition-colors" aria-label="Twitter">
+            <i class="fab fa-twitter"></i>
+          </a>
+          <a href="#" class="text-white-200 hover:text-white transition-colors" aria-label="Instagram">
+            <i class="fab fa-instagram"></i>
+          </a>
+          <a href="#" class="text-white-200 hover:text-white transition-colors" aria-label="LinkedIn">
+            <i class="fab fa-linkedin-in"></i>
+          </a>
+        </div>
+      </div>
+      
+      <div>
+        <h3 class="text-xl font-bold mb-4">Quick Links</h3>
+        <ul class="space-y-2">
+          <li><a href="#home" class="text-red-400 hover:text-white transition-colors">Home</a></li>
+          <li><a href="#monitor" class="text-white-400 hover:text-white transition-colors">Monitor</a></li>
+          <li><a href="#crop-suitability" class="text-purple-400 hover:text-white transition-colors">Crop Suitability</a></li>
+         <li><a href="#suggestions" class="text-pink-400 hover:text-white transition-colors">Suggestions</a></li>
+         <li><a href="#about" class="text-blue-400 hover:text-white transition-colors">about</a></li>
+          
+        </ul>
+      </div>
+      
+      <div>
+        <h3 class="text-xl font-bold mb-4">Contact Us</h3>
+        <ul class="space-y-2">
+          <li class="flex items-center">
+            <i class="fas fa-envelope mr-2 text-green-300" aria-hidden="true"></i>
+            <a href="mailto:info@smartagri.com" class="text-green-200 hover:text-white transition-colors">info@smartagri.com</a>
+          </li>
+          <li class="flex items-center">
+            <i class="fas fa-phone mr-2 text-white-400" aria-hidden="true"></i>
+            <span>+1 (555) 123-4567</span>
+          </li>
+          <li class="flex items-center">
+            <i class="fas fa-map-marker-alt mr-2 text-white-400" aria-hidden="true"></i>
+            <span>123 Farm Lane, Agriculture City</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="border-t border-green-800 mt-8 pt-8 text-center text-green-300">
+      <p>&copy; 2025 SmartAgri. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Audio Player -->
+  <div class="fixed bottom-4 right-4">
+    <button id="audio-toggle" class="bg-green-600 text-white p-3 rounded-full shadow-lg hover:bg-green-700 transition-colors" aria-label="Toggle background music">
+      <i class="fas fa-music"></i>
+    </button>
+    <audio id="background-audio" loop>
+      <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+  </div>
+
+  <!-- Scroll to Top Button -->
+  <button id="scroll-to-top" class="fixed bottom-20 right-4 bg-green-600 text-white p-3 rounded-full shadow-lg hover:bg-green-700 transition-colors opacity-0 invisible" aria-label="Scroll to top">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  <!-- Loading Overlay -->
+  <div id="loading-overlay" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white p-6 rounded-lg shadow-xl text-center">
+      <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-500 mx-auto mb-4"></div>
+      <p class="text-lg font-semibold">Loading...</p>
+    </div>
+  </div>
+</body>
+
+
+</html>
